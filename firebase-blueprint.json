@@ -1,0 +1,120 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "App user (admin, receptionist, teacher)",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "role": { "type": "string", "enum": ["admin", "receptionist", "teacher"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "name", "role"]
+    },
+    "Student": {
+      "title": "Student",
+      "description": "Student in the school",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "level": { "type": "string", "enum": ["elementary", "middle", "high"] },
+        "branch": { "type": "string" },
+        "phone": { "type": "string" },
+        "enrolledSince": { "type": "string", "format": "date-time" },
+        "isActive": { "type": "boolean" }
+      },
+      "required": ["name", "level", "isActive"]
+    },
+    "Teacher": {
+      "title": "Teacher",
+      "description": "Teacher in the school",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "subjects": { "type": "array", "items": { "type": "string" } },
+        "payType": { "type": "string", "enum": ["hourly", "percentage"] },
+        "payRate": { "type": "number" },
+        "phone": { "type": "string" }
+      },
+      "required": ["name", "subjects", "payType", "payRate"]
+    },
+    "Subject": {
+      "title": "Subject",
+      "description": "Subject taught in the school",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "level": { "type": "string", "enum": ["elementary", "middle", "high"] }
+      },
+      "required": ["name", "level"]
+    },
+    "Session": {
+      "title": "Session",
+      "description": "A single class session",
+      "type": "object",
+      "properties": {
+        "subjectId": { "type": "string" },
+        "teacherId": { "type": "string" },
+        "roomId": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "startTime": { "type": "string" },
+        "endTime": { "type": "string" },
+        "attendance": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["subjectId", "teacherId", "roomId", "date", "startTime", "endTime"]
+    },
+    "IntensiveCourse": {
+      "title": "Intensive Course",
+      "description": "Short-term intensive revision program",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "subjectId": { "type": "string" },
+        "level": { "type": "string" },
+        "startDate": { "type": "string", "format": "date" },
+        "endDate": { "type": "string", "format": "date" },
+        "price": { "type": "number" },
+        "totalSessions": { "type": "number" }
+      },
+      "required": ["name", "subjectId", "startDate", "endDate", "price"]
+    },
+    "Payment": {
+      "title": "Payment",
+      "description": "Record of a payment made by a student",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string" },
+        "type": { "type": "string", "enum": ["monthly", "intensive"] },
+        "targetId": { "type": "string" },
+        "amount": { "type": "number" },
+        "date": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["paid", "partial", "pending"] },
+        "receivedBy": { "type": "string" }
+      },
+      "required": ["studentId", "type", "amount", "date", "status"]
+    },
+    "Room": {
+      "title": "Room",
+      "description": "Classroom",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "capacity": { "type": "number" }
+      },
+      "required": ["name", "capacity"]
+    }
+  },
+  "firestore": {
+    "users": { "schema": "User", "description": "System users" },
+    "students": { "schema": "Student", "description": "Students list" },
+    "teachers": { "schema": "Teacher", "description": "Teachers list" },
+    "subjects": { "schema": "Subject", "description": "Available subjects" },
+    "sessions": { "schema": "Session", "description": "Scheduled sessions" },
+    "intensiveCourses": { "schema": "IntensiveCourse", "description": "Intensive programs" },
+    "payments": { "schema": "Payment", "description": "Payment records" },
+    "rooms": { "schema": "Room", "description": "Classrooms" }
+  }
+}
