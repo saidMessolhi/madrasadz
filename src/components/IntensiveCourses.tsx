@@ -5,6 +5,13 @@ import Modal from './ui/Modal';
 
 export default function IntensiveCourses() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isRegistrantsModalOpen, setIsRegistrantsModalOpen] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState<any>(null);
+
+  const handleOpenRegistrants = (course: any) => {
+    setSelectedCourse(course);
+    setIsRegistrantsModalOpen(true);
+  };
 
   const courses = [
     { 
@@ -149,7 +156,7 @@ export default function IntensiveCourses() {
                 </button>
               </div>
               <button 
-                onClick={() => alert(`عرض قائمة المسجلين في دورة ${course.name}`)}
+                onClick={() => handleOpenRegistrants(course)}
                 className="flex items-center gap-1 text-xs font-bold text-indigo-600 hover:gap-2 transition-all"
               >
                 إدارة المسجلين
@@ -203,6 +210,74 @@ export default function IntensiveCourses() {
             فتح التسجيلات
           </button>
         </form>
+      </Modal>
+      
+      {/* Manage Registrants Modal */}
+      <Modal 
+        isOpen={isRegistrantsModalOpen} 
+        onClose={() => setIsRegistrantsModalOpen(false)} 
+        title={`المسجلون في: ${selectedCourse?.name}`}
+      >
+        <div className="space-y-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="p-3 bg-indigo-50 rounded-lg text-indigo-600">
+              <Users className="w-5 h-5" />
+            </div>
+            <div className="text-left" dir="rtl">
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">نسبة الامتلاء</span>
+              <p className="text-lg font-black text-slate-800">{selectedCourse?.studentsCount} / {selectedCourse?.maxStudents}</p>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+             {/* Mock data list */}
+            {[
+              { id: 1, name: 'سيف الدين بوزيد', status: 'مدفوع', date: '٢٠٢٦-٠٥-٠٥' },
+              { id: 2, name: 'مريم قدور', status: 'جزئي', date: '٢٠٢٦-٠٥-٠٦' },
+              { id: 3, name: 'عبد الجليل علواني', status: 'غير مدفوع', date: '٢٠٢٦-٠٥-٠٧' },
+            ].map((reg) => (
+              <div key={reg.id} className="p-4 bg-white border border-slate-100 rounded-xl flex items-center justify-between hover:border-indigo-200 transition-colors" dir="rtl">
+                <div>
+                  <p className="font-bold text-slate-800">{reg.name}</p>
+                  <p className="text-[10px] text-slate-400 font-medium">تسجيل: {reg.date}</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className={cn(
+                    "px-2 py-1 rounded-md text-[9px] font-bold uppercase tracking-tight",
+                    reg.status === 'مدفوع' ? "bg-emerald-50 text-emerald-600" : 
+                    reg.status === 'جزئي' ? "bg-amber-50 text-amber-600" : "bg-rose-50 text-rose-600"
+                  )}>
+                    {reg.status}
+                  </span>
+                  <button 
+                    onClick={() => alert(`تعديل حالة دفع تلميذ ${reg.name}`)}
+                    className="p-1.5 text-slate-300 hover:text-indigo-600 transition-colors"
+                  >
+                    <Edit3 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex gap-3">
+             <button 
+              onClick={() => {
+                alert('جاري تصدير قائمة الحضور بصيغة PDF/Excel...');
+                setIsRegistrantsModalOpen(false);
+              }}
+              className="flex-1 py-3 bg-slate-900 text-white rounded-xl text-xs font-bold transition-all hover:bg-slate-800"
+             >
+                تصدير القائمة
+             </button>
+             <button 
+              onClick={() => setIsRegistrantsModalOpen(false)}
+              className="flex-1 py-3 bg-slate-100 text-slate-600 rounded-xl text-xs font-bold transition-all hover:bg-slate-200"
+             >
+                إغلاق
+             </button>
+          </div>
+        </div>
       </Modal>
     </div>
   );

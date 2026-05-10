@@ -107,12 +107,19 @@ export default function Teachers() {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">المادة</label>
-              <input 
+              <select 
                 required
-                type="text" 
                 className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all font-bold text-slate-700" 
-                placeholder="الرياضيات" 
-              />
+              >
+                <option value="">اختر المادة...</option>
+                <option value="الرياضيات">الرياضيات</option>
+                <option value="الفيزياء">الفيزياء</option>
+                <option value="اللغة العربية">اللغة العربية</option>
+                <option value="الإنجليزية">الإنجليزية</option>
+                <option value="الفرنسية">الفرنسية</option>
+                <option value="العلوم الطبيعية">العلوم الطبيعية</option>
+                <option value="فلسفة">فلسفة</option>
+              </select>
             </div>
             <div className="space-y-2">
               <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">الهاتف</label>

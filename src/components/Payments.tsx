@@ -5,6 +5,7 @@ import Modal from './ui/Modal';
 
 export default function Payments() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
 
   const transactions = [
     { id: 1, student: 'أحمد بن علي', type: 'اشتراك شهري', item: 'الرياضيات', date: '٢٠٢٦-٠٥-١٠', amount: 3500, method: 'نقداً', status: 'مكتمل' },
@@ -20,7 +21,12 @@ export default function Payments() {
   };
 
   const handleExport = () => {
-    alert('جاري توليد تقرير المدفوعات بصيغة CSV/PDF...');
+    setIsExportModalOpen(true);
+  };
+
+  const executeExport = (format: string) => {
+    alert(`جاري تجهيز تقرير المدفوعات بصيغة ${format}...`);
+    setIsExportModalOpen(false);
   };
 
   return (
@@ -195,6 +201,51 @@ export default function Payments() {
             حفظ وطباعة الوصل
           </button>
         </form>
+      </Modal>
+
+      {/* Export Report Modal */}
+      <Modal 
+        isOpen={isExportModalOpen} 
+        onClose={() => setIsExportModalOpen(false)} 
+        title="تصدير التقارير المالية"
+      >
+        <div className="space-y-6">
+          <div className="space-y-3">
+            <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">اختر فترة التقرير</label>
+            <div className="grid grid-cols-2 gap-3">
+              <button className="p-3 border-2 border-indigo-600 bg-indigo-50 text-indigo-700 rounded-xl font-bold text-sm">شهر ماي ٢٠٢٦</button>
+              <button className="p-3 border border-slate-200 hover:border-indigo-200 transition-colors rounded-xl font-bold text-sm text-slate-600">السنة كاملة</button>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">صيغة الملف</label>
+            <div className="grid grid-cols-2 gap-4">
+              <button 
+                onClick={() => executeExport('PDF')}
+                className="flex flex-col items-center gap-3 p-4 border border-slate-100 rounded-2xl hover:border-rose-200 hover:bg-rose-50 transition-all group"
+              >
+                <div className="w-12 h-12 bg-rose-100 rounded-full flex items-center justify-center text-rose-600 group-hover:scale-110 transition-transform">
+                  <FileText className="w-6 h-6" />
+                </div>
+                <span className="font-bold text-slate-700">نسخة PDF</span>
+              </button>
+              <button 
+                onClick={() => executeExport('CSV')}
+                className="flex flex-col items-center gap-3 p-4 border border-slate-100 rounded-2xl hover:border-emerald-200 hover:bg-emerald-50 transition-all group"
+              >
+                <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 group-hover:scale-110 transition-transform">
+                  <Download className="w-6 h-6" />
+                </div>
+                <span className="font-bold text-slate-700">نسخة Excel</span>
+              </button>
+            </div>
+          </div>
+
+          <p className="text-[10px] text-slate-400 font-medium text-center leading-relaxed">
+            ملاحظة: التقارير تحتوي على جميع الحركات المالية المسجلة خلال الفترة المختارة، شاملة المداخيل ومستحقات الأساتذة.
+          </p>
+        </div>
       </Modal>
     </div>
   );

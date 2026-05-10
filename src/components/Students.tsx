@@ -6,7 +6,15 @@ import Modal from './ui/Modal';
 
 export default function Students({ role = 'receptionist' }: { role?: string }) {
   const [showAddModal, setShowAddModal] = React.useState(false);
+  const [selectedSubject, setSelectedSubject] = React.useState('');
   const isStaff = role === 'admin' || role === 'receptionist';
+
+  // Mock data for subjects and teachers
+  const subjectsData = [
+    { id: 'sub1', name: 'الرياضيات', teachers: ['أحمد بن علي', 'عمر فاروق'] },
+    { id: 'sub2', name: 'الفيزياء', teachers: ['سارة لعمري', 'ياسين براهيمي'] },
+    { id: 'sub3', name: 'اللغة العربية', teachers: ['محمد بوشيخ'] },
+  ];
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,6 +82,34 @@ export default function Students({ role = 'receptionist' }: { role?: string }) {
                 className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all font-bold text-slate-700" 
                 placeholder="علوم تجريبية" 
               />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-6 p-4 bg-indigo-50/50 rounded-xl border border-indigo-100">
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-indigo-600 uppercase tracking-widest">المادة المطلوب التسجيل فيها</label>
+              <select 
+                required
+                value={selectedSubject}
+                onChange={(e) => setSelectedSubject(e.target.value)}
+                className="w-full px-4 py-3 bg-white border border-indigo-200 rounded-xl outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all font-bold text-slate-700"
+              >
+                <option value="">اختر المادة...</option>
+                {subjectsData.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+              </select>
+            </div>
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-indigo-600 uppercase tracking-widest">الأستاذ المختار</label>
+              <select 
+                required
+                disabled={!selectedSubject}
+                className="w-full px-4 py-3 bg-white border border-indigo-200 rounded-xl outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all font-bold text-slate-700 disabled:opacity-50"
+              >
+                <option value="">اختر الأستاذ...</option>
+                {selectedSubject && subjectsData.find(s => s.id === selectedSubject)?.teachers.map(t => (
+                  <option key={t} value={t}>{t}</option>
+                ))}
+              </select>
             </div>
           </div>
           <button 

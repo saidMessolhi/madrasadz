@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Plus, Clock, User, BookOpen, MapPin, Save, Printer } from 'lucide-react';
+import { Plus, Clock, User, BookOpen, MapPin, Save, Printer, Check, X as CloseIcon } from 'lucide-react';
 import { cn } from '../lib/utils';
 import Modal from './ui/Modal';
 
 export default function Sessions({ role = 'receptionist' }: { role?: string }) {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isAttendanceModalOpen, setIsAttendanceModalOpen] = useState(false);
+  const [selectedSession, setSelectedSession] = useState<any>(null);
 
   const sessions = [
     { id: 1, time: '08:30 - 10:00', subject: 'الرياضيات', teacher: 'أحمد بن علي', room: 'القاعة ٠٤', level: '٣ ثانوي (علوم)', attendees: 24, total: 30 },
@@ -25,6 +27,27 @@ export default function Sessions({ role = 'receptionist' }: { role?: string }) {
     window.print();
     document.title = originalTitle;
   };
+
+  const handleOpenAttendance = (session: any) => {
+    setSelectedSession(session);
+    setIsAttendanceModalOpen(true);
+  };
+
+  const handleSaveAttendance = (e: React.FormEvent) => {
+    e.preventDefault();
+    alert(`تم حفظ حضور تلاميذ حصة ${selectedSession?.subject} بنجاح!`);
+    setIsAttendanceModalOpen(false);
+  };
+
+  // Mock students for the attendance list
+  const mockAttendanceList = [
+    { id: 1, name: 'محمد أمين', isPresent: true },
+    { id: 2, name: 'خديجة بوشريف', isPresent: true },
+    { id: 3, name: 'رياض محرز', isPresent: false },
+    { id: 4, name: 'سارة بن عودة', isPresent: true },
+    { id: 5, name: 'ياسين زناتي', isPresent: true },
+    { id: 6, name: 'ليلى علوي', isPresent: false },
+  ];
 
   return (
     <div className="space-y-8 pb-10">
@@ -109,7 +132,7 @@ export default function Sessions({ role = 'receptionist' }: { role?: string }) {
                   </div>
                 </div>
                 <button 
-                  onClick={() => alert(`بدء تسجيل غيابات حصة ${session.subject}`)}
+                  onClick={() => handleOpenAttendance(session)}
                   className="bg-white border border-slate-200 text-slate-600 px-4 py-2 rounded-lg text-xs font-bold hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-100 transition-all active:scale-95"
                 >
                   تسجيل الحضور
@@ -172,6 +195,55 @@ export default function Sessions({ role = 'receptionist' }: { role?: string }) {
             تأكيد الحجز
           </button>
         </form>
+      </Modal>
+
+      <Modal 
+        isOpen={isAttendanceModalOpen} 
+        onClose={() => setIsAttendanceModalOpen(false)} 
+        title={`تسجيل الحضور: ${selectedSession?.subject} - ${selectedSession?.level}`}
+      >
+        <div className="space-y-6">
+          <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-100">
+            <div className="flex items-center gap-2">
+              <User className="w-4 h-4 text-slate-400" />
+              <span className="text-sm font-bold text-slate-700">{selectedSession?.teacher}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Clock className="w-4 h-4 text-slate-400" />
+              <span className="text-sm font-bold text-slate-700">{selectedSession?.time}</span>
+            </div>
+          </div>
+
+          <div className="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
+            {mockAttendanceList.map((student) => (
+              <div key={student.id} className="flex items-center justify-between p-3 bg-white border border-slate-100 rounded-xl hover:border-indigo-200 transition-colors">
+                <span className="font-bold text-slate-700">{student.name}</span>
+                <div className="flex gap-2">
+                  <button className={cn(
+                    "w-8 h-8 rounded-lg flex items-center justify-center transition-all",
+                    student.isPresent ? "bg-emerald-500 text-white" : "bg-slate-100 text-slate-400 hover:bg-emerald-100 hover:text-emerald-600"
+                  )}>
+                    <Check className="w-4 h-4" />
+                  </button>
+                  <button className={cn(
+                    "w-8 h-8 rounded-lg flex items-center justify-center transition-all",
+                    !student.isPresent ? "bg-rose-500 text-white" : "bg-slate-100 text-slate-400 hover:bg-rose-100 hover:text-rose-600"
+                  )}>
+                    <CloseIcon className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <button 
+            onClick={handleSaveAttendance}
+            className="w-full py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-2"
+          >
+            <Save className="w-4 h-4" />
+            حفظ قائمة الحضور
+          </button>
+        </div>
       </Modal>
     </div>
   );

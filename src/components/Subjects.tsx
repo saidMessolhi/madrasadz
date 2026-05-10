@@ -7,11 +7,11 @@ export default function Subjects() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   
   const subjects = [
-    { id: 1, name: 'الرياضيات', teacher: 'أحمد بن علي', level: 'ثانوي / متوسط', students: 245, sessions: 18, color: 'indigo' },
+    { id: 1, name: 'الرياضيات', teacher: 'أحمد بن علي', level: 'ثانوي', students: 145, sessions: 10, color: 'indigo' },
+    { id: 1.1, name: 'الرياضيات', teacher: 'عمر فاروق', level: 'ثانوي', students: 100, sessions: 8, color: 'indigo' },
     { id: 2, name: 'الفيزياء', teacher: 'سارة لعمري', level: 'ثانوي', students: 180, sessions: 12, color: 'blue' },
     { id: 3, name: 'اللغة العربية', teacher: 'محمد بوشيخ', level: 'جميع الأطوار', students: 320, sessions: 25, color: 'emerald' },
-    { id: 4, name: 'الإنجليزية', teacher: 'إيمان قادري', level: 'ابتدائي + متوسط', students: 115, sessions: 10, color: 'amber' },
-    { id: 5, name: 'علوم الطبيعة والحياة', teacher: 'خالد منصف', level: 'ثانوي (علوم)', students: 95, sessions: 8, color: 'rose' },
+    { id: 4, name: 'الإنجليزية', teacher: 'إيمان قادري', level: 'متوسط', students: 115, sessions: 10, color: 'amber' },
   ];
 
   const handleSave = (e: React.FormEvent) => {
@@ -119,6 +119,7 @@ export default function Subjects() {
               <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">الأستاذ المشرف</label>
               <select className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all font-bold text-slate-700">
                 <option>أحمد بن علي</option>
+                <option>عمر فاروق</option>
                 <option>سارة لعمري</option>
                 <option>محمد بوشيخ</option>
               </select>
